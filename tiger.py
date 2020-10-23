@@ -18,11 +18,20 @@ class Action(Enum):
     def get_action(cls):
         return choice([Action.OPENLEFT, Action.LISTEN, Action.OPENRIGHT])
 
+    @classmethod
+    def all_actions(cls):
+        return [Action.OPENLEFT, Action.LISTEN, Action.OPENRIGHT]
+
 class Observation(Enum):
     GROWLLEFT = auto()
     GROWLRIGHT = auto()
     TIGERRIGHT = auto()
     TIGERLEFT = auto()
+
+class Reward(Enum):
+    LISTEN = -1
+    CORRECT = 10
+    INCORRECT = -100
 
 
 class TigerProblem:
@@ -39,6 +48,9 @@ class TigerProblem:
 
     def get_action(self):
         self.action = Action.get_action()
+    
+    def all_actions(self):
+        return Action.all_actions()
 
     def get_observation(self):
         if self.action == None:
@@ -56,17 +68,17 @@ class TigerProblem:
 
     def get_reward(self):
         if self.action == Action.LISTEN:
-            self.reward = -1
+            self.reward = Reward.LISTEN.value
         if self.action == Action.OPENRIGHT:
             self.terminal  = True
             if self.state == State.TIGERRIGHT:
-                self.reward = -100
-            else: self.reward = 10
+                self.reward = Reward.INCORRECT.value
+            else: self.reward = Reward.CORRECT.value
         if self.action == Action.OPENLEFT:
             self.terminal = True
             if self.state == State.TIGERLEFT:
-                self.reward = -100
-            else: self.reward = 10
+                self.reward = Reward.INCORRECT.value
+            else: self.reward = Reward.CORRECT.value
 
             
 

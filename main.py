@@ -15,8 +15,19 @@ if __name__ == "__main__":
     #     n.add_children()
     # n.print_tree()
 
+    
+    
+    tree = Node("root")
+
     tiger = TigerProblem()
-    print(tiger.state)
+
+    tree.add_children(tiger.all_actions())
+    
+    a = tree.select()
+    print(a.data)
+
+    
+    print("\n\nRun simulation")
     while tiger.terminal == False:
         tiger.get_action()
         print(tiger.action)
@@ -24,3 +35,5 @@ if __name__ == "__main__":
         print(tiger.observation)
         tiger.get_reward()
         print(tiger.reward)
+
+    print(tiger.all_actions())

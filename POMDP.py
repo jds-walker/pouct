@@ -29,4 +29,5 @@ class POMDP(ABC):
 #   -100 +10       -1   -1      +10 -100            :Rewards
     # terminal                    terminal
                 #   |    |   
-    
+                #   0
+                    
