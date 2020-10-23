@@ -12,17 +12,16 @@ class Node:
 
     def select(self):
         if len(self.children) == 0:
-            print(self.data)
             return self
         else:
             max_key = max(self.children, key=lambda n:  self.children[n].V)
             max_value = self.children[max_key].V
             max_keys = [k for k, v in self.children.items() if v.V == max_value]            
-            self.children[choice(max_keys)].select()
+            return self.children[choice(max_keys)].select()
 
     def add_children(self, children):
         for child in children:
-            self.children[child] = Node(self.data + ", " + str(child))
+            self.children[child] = Node(child)
 
     def print_tree(self):
         print(self.data)

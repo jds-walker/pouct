@@ -48,6 +48,9 @@ class TigerProblem:
 
     def get_action(self):
         self.action = Action.get_action()
+
+    def set_action(self, action):
+        self.action = action 
     
     def all_actions(self):
         return Action.all_actions()
