@@ -12,25 +12,25 @@ class Node:
         self.tier = tier # 1 . Action 0 . Observation
 
     def select(self):
-        if len(self.children) == 0: #do rollout and update N and V
-            self.N += 1
-            self.V = self.problem.rollout()
-        else: 
-            max_key = max(self.children, key=lambda n:  self.children[n].V)
-            max_value = self.children[max_key].V
-            max_keys = [k for k, v in self.children.items() if v.V == max_value]            
-            child = choice(max_keys)
-            self.children[child].act(child)
+        # Finds best next action then observe
+        max_key = max(self.children, key=lambda n:  self.children[n].V)
+        max_value = self.children[max_key].V
+        max_keys = [k for k, v in self.children.items() if v.V == max_value]            
+        action = choice(max_keys)
+        self.children[action].observe(action)
     
-
-    def act(self, action):
+    def observe(self, action):
+        # Gets observation based on action
         self.problem.set_action(action)
         observation = self.problem.get_observation()
         if observation in self.children:
+            # If observation has been seen previously seen perform selection from there
             self.children[observation].select()
         else:
+            # If it is the first observation perform a 
             self.children[observation] = Node(self.problem, tier=0) # Obtain first observation
             self.children[observation].add_children()
+            print(self.children)
         
     def add_children(self):
         for action in self.problem.all_actions():
