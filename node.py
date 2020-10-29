@@ -19,8 +19,8 @@ class Node:
             max_key = max(self.children, key=lambda n:  self.children[n].V)
             max_value = self.children[max_key].V
             max_keys = [k for k, v in self.children.items() if v.V == max_value]            
-            selected = choice(max_keys)
-            self.children[selected].act(selected)
+            child = choice(max_keys)
+            self.children[child].act(child)
     
 
     def act(self, action):
@@ -38,6 +38,7 @@ class Node:
         
 
     def print_tree(self):
+
         if len(self.children) > 0:
             for k, v in self.children.items():
                 print(k)
