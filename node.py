@@ -4,8 +4,6 @@ from tiger import TigerProblem
 
 class Node:
 
-
-
     def __init__(self, problem: TigerProblem, tier=1):
         self.problem = problem
         self.N = 0 # visitation count
@@ -22,7 +20,7 @@ class Node:
             max_value = self.children[max_key].V
             max_keys = [k for k, v in self.children.items() if v.V == max_value]            
             selected = choice(max_keys)
-            self.children[selected].problem.act(selected)
+            self.children[selected].act(selected)
     
 
     def act(self, action):
@@ -32,11 +30,11 @@ class Node:
             self.children[observation].select()
         else:
             self.children[observation] = Node(self.problem, tier=0) # Obtain first observation
-            self.children[observation].add_children(self.problem.all_actions())
+            self.children[observation].add_children()
         
-    def add_children(self, children):
-        for child in children:
-            self.children[child] = Node(child)
+    def add_children(self):
+        for action in self.problem.all_actions():
+            self.children[action] = Node(self.problem)
         
 
     def print_tree(self):
