@@ -4,17 +4,14 @@ from tiger import TigerProblem
 
 if __name__ == "__main__":
     
-    # tree = Node("root")
+
     tiger = TigerProblem()
+    tree = Node(tiger)
 
-    # tree.add_children(tiger.all_actions())
-    # tree.select(tiger)
+    tree.add_children(tiger.all_actions())
+    tree.select()
 
-
-    for _ in range(10):
-
-        print("\n\nRun simulation")
+    tree.print_tree()
 
 
-        print(tiger.rollout())
-        tiger.restart()
+
