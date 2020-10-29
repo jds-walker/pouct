@@ -36,12 +36,12 @@ class Reward(Enum):
 
 class TigerProblem:
 
-    action = None
-    observation = None
-    terminal = False
-
     def __init__(self):
         self.state = State.get_state()
+        self.action = None
+        self.observation = None
+        self.reward = 0
+        self.terminal = False
 
     def get_state(self):
         self.state = State.get_state()
@@ -54,6 +54,20 @@ class TigerProblem:
     
     def all_actions(self):
         return Action.all_actions()
+
+    def restart(self):
+        self.action = None
+        self.observation = None
+        self.reward = 0
+        self.terminal = False
+        self.get_state()
+
+    def rollout(self):
+        while self.terminal == False:
+            self.get_action()
+            self.get_observation()
+            self.get_reward()
+        return(self.reward)
 
     def get_observation(self):
         if self.action == None:
@@ -71,17 +85,17 @@ class TigerProblem:
 
     def get_reward(self):
         if self.action == Action.LISTEN:
-            self.reward = Reward.LISTEN.value
+            self.reward += Reward.LISTEN.value
         if self.action == Action.OPENRIGHT:
             self.terminal  = True
             if self.state == State.TIGERRIGHT:
-                self.reward = Reward.INCORRECT.value
-            else: self.reward = Reward.CORRECT.value
+                self.reward += Reward.INCORRECT.value
+            else: self.reward += Reward.CORRECT.value
         if self.action == Action.OPENLEFT:
             self.terminal = True
             if self.state == State.TIGERLEFT:
-                self.reward = Reward.INCORRECT.value
-            else: self.reward = Reward.CORRECT.value
+                self.reward += Reward.INCORRECT.value
+            else: self.reward += Reward.CORRECT.value
 
             
 

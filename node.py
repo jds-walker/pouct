@@ -26,6 +26,8 @@ class Node:
             print("act")
             selected.act(problem)    
 
+    
+
     def act(self, problem: TigerProblem):
         problem.set_action(self.data)
         observation = problem.get_observation()
