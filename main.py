@@ -10,11 +10,10 @@ if __name__ == "__main__":
 
     # tree.add_children()
 
-    tree.select(tree.N)
-    tree.select(tree.N)
+    print(tree.select(tree.N))
 
     for _ in range(1000):
-        tree.select(tree.N)
+        print(tree.select(tree.N))
 
 
     tree.print_tree()

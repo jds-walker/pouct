@@ -5,7 +5,7 @@ from tiger import TigerProblem
 
 class Node:
 
-    def __init__(self, problem: TigerProblem, exploration = 0.2, tier=1):
+    def __init__(self, problem: TigerProblem, exploration = 10, tier=1):
         self.problem = problem
         self.N = 0 # visitation count
         self.V = 0 # score of state
@@ -16,17 +16,33 @@ class Node:
 
     def select(self, TotalN):
         reward = None
+        choice_value = None
         if len(self.children) == 0:
             #rollout
             self.add_children()
             random_action = choice(list(self.children.keys()))
             reward = self.children[random_action].observe(random_action)
         else:
-            # Finds best next action then observe
-            max_key = max(self.children, key=lambda n:  self.children[n].V + ((self.exploration * sqrt(TotalN/self.children[n].N)) if self.children[n].N > 0 else 0 ))
-            max_value = self.children[max_key].V
-            max_keys = [k for k, v in self.children.items() if v.V == max_value]            
-            action = choice(max_keys)
+            # Find first time actions or best next action after all have been run once then observe
+
+            
+
+            # max_key = max(self.children, key=lambda n:  self.children[n].V + ((self.exploration * sqrt(TotalN/max(1, self.children[n].N)))))
+            # max_value = self.children[max_key].V
+            # max_keys = [k for k, v in self.children.items() if v.V == max_value]            
+            # action = choice(max_keys)
+            # reward = self.children[action].observe(action)
+            # Finds best next action then observe           
+            minimum_rollouts = min(self.children, key=lambda n: self.children[n].N)            
+            minimum_value = self.children[minimum_rollouts].N           
+            if (minimum_value>0):               
+                choice_key = max(self.children, key=lambda n:  self.children[n].V + ((self.exploration * sqrt(TotalN/self.children[n].N)) ))               
+                choice_value = self.children[choice_key].V          
+            else:              
+                choice_key = minimum_rollouts                
+                choice_value = self.children[choice_key].V            
+            choice_keys = [k for k, v in self.children.items() if v.V == choice_value]                      
+            action = choice(choice_keys)
             reward = self.children[action].observe(action)
 
         total = (self.N * self.V) + reward
@@ -61,7 +77,8 @@ class Node:
 
     def rollout(self):
         self.N = 1
-        self.V = self.problem.rollout()
+        if self.problem.terminal ==  False:
+            self.V = self.problem.rollout()
         self.problem.restart()
         return(self.V)
 
