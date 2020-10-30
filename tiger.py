@@ -1,5 +1,7 @@
-from numpy.random import choice
+from numpy.random import choice, seed
 from enum import Enum, auto
+
+seed(42)
 
 class State(Enum):
     TIGERLEFT = auto()

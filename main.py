@@ -2,17 +2,15 @@ from node import Node
 from tiger import TigerProblem
 
 
+
 if __name__ == "__main__":
     
 
     tiger = TigerProblem()
     tree = Node(tiger)
 
-    # tree.add_children()
-
-    print(tree.select(tree.N))
-
     for _ in range(1000):
+        tree.problem.restart()
         print(tree.select(tree.N))
 
 
