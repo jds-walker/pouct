@@ -7,16 +7,17 @@ seed(42)
 
 class Node:
 
-    def __init__(self, problem: TigerProblem, exploration = 10, tier=1):
+    def __init__(self, problem: TigerProblem, exploration = 25, tier=1):
         self.problem = problem
         self.N = 0 # visitation count
+        self.total = 0
         self.V = 0 # score of state
         self.children = dict()
         self.tier = tier # 1 . Action 0 . Observation
         self.exploration = exploration
         
 
-    def select(self, TotalN):
+    def select(self, totalN):
         reward = None
         choice_value = None
         if len(self.children) == 0:
@@ -28,7 +29,7 @@ class Node:
             minimum_rollouts = min(self.children, key=lambda n: self.children[n].N)            
             minimum_value = self.children[minimum_rollouts].N           
             if (minimum_value>0):               
-                choice_key = max(self.children, key=lambda n:  self.children[n].V + ((self.exploration * sqrt(TotalN/self.children[n].N)) ))               
+                choice_key = max(self.children, key=lambda n:  self.children[n].V + ((self.exploration * sqrt(totalN/self.children[n].N)) ))               
                 choice_value = self.children[choice_key].V          
             else:              
                 choice_key = minimum_rollouts                
@@ -37,9 +38,9 @@ class Node:
             action = choice(choice_keys)
             reward = self.children[action].observe(action)
 
-        total = (self.N * self.V) + reward
+        self.total += reward
         self.N += 1
-        self.V = total / self.N
+        self.V = self.total / self.N
         return reward
 
 
@@ -55,9 +56,9 @@ class Node:
         if observation in self.children:
             # If observation has been seen previously seen perform selection from there    
             if self.problem.terminal == True:
-                total = (self.N * self.V) + self.problem.reward
+                self.total += self.problem.reward
                 self.N += 1
-                self.V = total / self.N
+                self.V = self.total / self.N
                 return self.problem.reward
             reward = self.children[observation].select(self.N)
         else:
@@ -65,16 +66,16 @@ class Node:
             self.children[observation] = Node(self.problem, tier=0) # Obtain first observation
             if self.problem.terminal == True:
 
-                total = (self.N * self.V) + self.problem.reward
+                self.total += self.problem.reward
                 self.N += 1
-                self.V = total / self.N
+                self.V = self.total / self.N
                 return self.problem.reward
             
             reward = self.children[observation].rollout()
         
-        total = (self.N * self.V) + reward
+        self.total += reward
         self.N += 1
-        self.V = total / self.N
+        self.V = self.total / self.N
         return reward
         
 

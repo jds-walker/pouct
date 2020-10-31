@@ -9,7 +9,7 @@ if __name__ == "__main__":
     tiger = TigerProblem()
     tree = Node(tiger)
 
-    for _ in range(1000):
+    for _ in range(10000):
         tree.problem.restart()
         print(tree.select(tree.N))
 
