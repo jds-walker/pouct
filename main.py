@@ -9,7 +9,7 @@ if __name__ == "__main__":
     tree = Node(tiger)
 
     # Train
-    for _ in range(10000):
+    for _ in range(25000):
         tree.problem.restart()
         tree.select(tree.N)
 

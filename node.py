@@ -1,13 +1,12 @@
-from random import choice, seed
+from random import choice
 from math import sqrt
 from enum import Enum
 from tiger import TigerProblem
 
-seed(42)
 
 class Node:
 
-    def __init__(self, problem: TigerProblem, exploration = 10, tier=1):
+    def __init__(self, problem: TigerProblem, exploration = 7, tier=1):
         self.problem = problem
         self.N = 0 # visitation count
         self.total = 0
@@ -15,7 +14,6 @@ class Node:
         self.children = dict()
         self.tier = tier # 1 . Action 0 . Observation
         self.exploration = exploration
-        
 
     def select(self, totalN):
         reward = None
@@ -25,6 +23,7 @@ class Node:
             self.add_children()
             random_action = choice(list(self.children.keys()))
             reward = self.children[random_action].observe(random_action)
+
         else:       
             minimum_rollouts = min(self.children, key=lambda n: self.children[n].N)            
             minimum_value = self.children[minimum_rollouts].N           
@@ -33,8 +32,9 @@ class Node:
                 choice_value = self.children[choice_key].V          
             else:              
                 choice_key = minimum_rollouts                
-                choice_value = self.children[choice_key].V            
-            choice_keys = [k for k, v in self.children.items() if v.V == choice_value]                      
+                choice_value = self.children[choice_key].V   
+
+            choice_keys = [k for k, v in self.children.items() if v.V == choice_value] 
             action = choice(choice_keys)
             reward = self.children[action].observe(action)
 
@@ -44,7 +44,6 @@ class Node:
         return reward
 
 
-    
     def observe(self, action):
         # Gets observation based on action
         self.problem.set_action(action)
@@ -65,12 +64,11 @@ class Node:
             # If it is the first observation perform a 
             self.children[observation] = Node(self.problem, tier=0) # Obtain first observation
             if self.problem.terminal == True:
-
                 self.total += self.problem.reward
                 self.N += 1
                 self.V = self.total / self.N
                 return self.problem.reward
-            
+
             reward = self.children[observation].rollout()
         
         self.total += reward
@@ -78,19 +76,14 @@ class Node:
         self.V = self.total / self.N
         return reward
         
-
-
     def rollout(self):
         self.N = 1
         self.V = self.problem.rollout()
         return(self.V)
 
-        
     def add_children(self):
         for action in self.problem.all_actions():
             self.children[action] = Node(self.problem, tier=1)
-
-        
 
     def play(self):
         optimal = max(self.children, key=lambda n: self.children[n].N)    
