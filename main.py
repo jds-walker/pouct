@@ -17,8 +17,6 @@ if __name__ == "__main__":
     rewards = []
     for _ in range(1000):
         tree.problem.restart()
-
-
         rewards.append(tree.play())
     
     print(sum(rewards)/len(rewards))
