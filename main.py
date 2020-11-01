@@ -1,6 +1,5 @@
 from node import Node
 from tiger import TigerProblem
-from tiger import Action
 
 
 
@@ -10,7 +9,7 @@ if __name__ == "__main__":
     tree = Node(tiger)
 
     # Train
-    for _ in range(100000):
+    for _ in range(10000):
         tree.problem.restart()
         tree.select(tree.N)
 
@@ -23,6 +22,6 @@ if __name__ == "__main__":
         rewards.append(tree.play())
     
     print(sum(rewards)/len(rewards))
-
+    print(rewards[:100])
 
 

@@ -7,7 +7,7 @@ seed(42)
 
 class Node:
 
-    def __init__(self, problem: TigerProblem, exploration = 2, tier=1):
+    def __init__(self, problem: TigerProblem, exploration = 10, tier=1):
         self.problem = problem
         self.N = 0 # visitation count
         self.total = 0
