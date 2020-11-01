@@ -49,9 +49,13 @@ class TigerProblem:
         self.state = State.get_state()
 
     def get_action(self):
+        if self.terminal == True:
+            raise RuntimeError("Should not get action for terminal case")
         self.action = Action.get_action()
 
     def set_action(self, action):
+        if self.terminal == True:
+            raise RuntimeError("Should not set action for terminal case")
         self.action = action 
     
     def all_actions(self):
@@ -74,14 +78,16 @@ class TigerProblem:
     def get_observation(self):
         if self.action == None:
             raise RuntimeError("Actions should not be null")
+        if self.terminal == True:
+            raise RuntimeError("Should not get observation for terminal case")
         if self.state == State.TIGERRIGHT:
             if self.action == Action.LISTEN:
-                self.observation = choice([Observation.GROWLRIGHT, Observation.GROWLLEFT], 1, [0.85, 0.15])[0]
+                self.observation = choice([Observation.GROWLRIGHT, Observation.GROWLLEFT], 1, p=[0.85, 0.15])[0]
             if (self.action == Action.OPENRIGHT) or (self.action  == Action.OPENLEFT):
                 self.observation = Observation.TIGERRIGHT
         if self.state == State.TIGERLEFT:
             if self.action == Action.LISTEN:
-                self.observation = choice([Observation.GROWLRIGHT, Observation.GROWLLEFT], 1, [0.15, 0.85])[0]
+                self.observation = choice([Observation.GROWLRIGHT, Observation.GROWLLEFT], 1, p=[0.15, 0.85])[0]
             if self.action == Action.OPENRIGHT or self.action  == Action.OPENLEFT:
                 self.observation = Observation.TIGERLEFT
 

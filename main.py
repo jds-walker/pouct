@@ -1,20 +1,24 @@
 from node import Node
 from tiger import TigerProblem
+from tiger import Action
 
 
 
 if __name__ == "__main__":
-    
 
     tiger = TigerProblem()
+
     tree = Node(tiger)
+    
+
+
 
     for _ in range(10000):
         tree.problem.restart()
-        print(tree.select(tree.N))
+        tree.select(tree.N)
 
 
-    tree.print_tree()
+    t = tree
 
 
 
