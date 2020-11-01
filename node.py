@@ -7,7 +7,7 @@ seed(42)
 
 class Node:
 
-    def __init__(self, problem: TigerProblem, exploration = 3, tier=1):
+    def __init__(self, problem: TigerProblem, exploration = 2, tier=1):
         self.problem = problem
         self.N = 0 # visitation count
         self.total = 0
@@ -92,11 +92,14 @@ class Node:
 
         
 
-    def print_tree(self):
-
-        if len(self.children) > 0:
-            for k, v in self.children.items():
-                print(k)
-                v.print_tree()
+    def play(self):
+        optimal = max(self.children, key=lambda n: self.children[n].N)    
+        self.problem.set_action(optimal)        
+        self.problem.get_observation()
+        self.problem.get_reward()
+        if self.problem.terminal == False:
+            return self.children[optimal].children[self.problem.observation].play()
+        else: 
+            return self.problem.reward
 
 
