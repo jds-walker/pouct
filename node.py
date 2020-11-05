@@ -14,6 +14,12 @@ class Node:
         self.children = dict()
         self.tier = tier # 1 . Action 0 . Observation
         self.exploration = exploration
+        self.B = 0 # Belief
+    
+    def belief(self):
+        # B(s, h) = Pr(st = s | ht = h). 
+        # The belief state is the probability distribution over states given history h 
+        pass
 
     def select(self, totalN):
         reward = None
