@@ -7,36 +7,38 @@ from collections import Counter
 
 if __name__ == "__main__":
 
-    #Particles
-    B = [Particle().state for _ in range(100)]
+    while True:
+        #Particles
+        B = [Particle().state for _ in range(100)]
+        
+        # #Real Problem
+        real = TigerProblem()
+        real.get_state()
+        print(real.state)
+        real.action = Action.LISTEN
+        print(real.action)
+        real.get_observation()
 
-    #Real Problem
-    real = TigerProblem()
-    real.get_state()
-    print(real.state)
-    real.action = Action.LISTEN
-    print(real.action)
-    real.get_observation()
-
-    #Sampling from particles
-    newB = []
-    while len(newB) < 100:
-        s = choice(B)
-        G = TigerProblem()
-        G.state = s
-        G.action = real.action
-        G.get_observation()
-         
-        if G.observation == real.observation:
-            newB.append(G.state)        
-
-    print(Counter(newB))
+        # #Sampling from particles
+        newB = []
+        while len(newB) < 100:
+            s = choice(B)
+            G = TigerProblem()
+            G.state = s
+            G.action = real.action
+            G.get_observation()
+            
+            if G.observation == real.observation:
+                newB.append(G.state)        
+        
+        print(Counter(newB))
+        break
 
     while False:
         tiger = TigerProblem()
+        
         tree = Node(tiger)
-
-
+        # tree.B = [Particle().state for _ in range(100)]
         
         # Train
         for _ in range(1000):
@@ -44,9 +46,9 @@ if __name__ == "__main__":
             tree.select(tree.N)
 
         # Plan -> Execute -> Plan -> Execute ((s,a,o), (s,a,o)) -
-            # Enumeration first - see the evolution of the beliefs 
-            # after this works scale up
-                # e.g. prticle representation
+        #     Enumeration first - see the evolution of the beliefs 
+        #     after this works scale up
+        #         e.g. prticle representation
 
         # Test
         rewards = []
@@ -56,5 +58,5 @@ if __name__ == "__main__":
         
         print(sum(rewards)/len(rewards))
         print(rewards[:100])
-
+        break
 

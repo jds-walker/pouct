@@ -2,11 +2,12 @@ from random import choice
 from math import sqrt
 from enum import Enum
 from tiger import TigerProblem
+from particle import Particle
 
 
 class Node:
 
-    def __init__(self, problem: TigerProblem, exploration = 7, tier=1):
+    def __init__(self, problem: TigerProblem, belief = [Particle().state for _ in range(100)], exploration = 7, tier=1):
         self.problem = problem
         self.N = 0 # visitation count
         self.total = 0
@@ -14,14 +15,11 @@ class Node:
         self.children = dict()
         self.tier = tier # 1 . Action 0 . Observation
         self.exploration = exploration
-        self.B = 0 # Belief
-    
-    def belief(self):
-        # B(s, h) = Pr(st = s | ht = h). 
-        # The belief state is the probability distribution over states given history h 
-        pass
+        # self.B = [] # Belief
+        # self.B.append(belief)
 
     def select(self, totalN):
+        # self.problem.state = choice(self.B)
         reward = None
         choice_value = None
         if len(self.children) == 0:
@@ -29,7 +27,6 @@ class Node:
             self.add_children()
             random_action = choice(list(self.children.keys()))
             reward = self.children[random_action].observe(random_action)
-
         else:       
             minimum_rollouts = min(self.children, key=lambda n: self.children[n].N)            
             minimum_value = self.children[minimum_rollouts].N           
