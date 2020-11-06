@@ -15,7 +15,7 @@ if __name__ == "__main__":
         real = TigerProblem()
         real.get_state()
         print(real.state)
-        real.action = Action.LISTEN
+        real.get_action()
         print(real.action)
         real.get_observation()
 
